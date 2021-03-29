@@ -1,38 +1,263 @@
-.App {
+* {
+  box-sizing: border-box;
+  padding: 0px;
+  margin: 0px;
+}
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.list-table {
+  width: 90%;
+  padding-bottom: 20px;
+}
+.table-title {
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  padding-top: 10px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, Helvetica, sans-serif;
+}
+thead {
+  background-color: #333A40;
+  color: white;
+  border: 1px solid #333A40;
+  font-weight: bold;
+}
+tr, td {
+  padding-left: 10px;
+  padding-right: 80px;
+}
+td {
+  height: 50px;
+}
+tr:nth-child(even) {
+  background-color: #F2F2F2;
+}
+.edit-text {
+  color: #36B7C5;
+  text-decoration: none;
+  padding-right: 5px;
+}
+.edit-text:hover {
+  color: #2A7E87;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.delete-text {
+  color: #ED5068;
+  text-decoration: none;
+  padding-left: 5px;
+}
+.delete-text:hover {
+  text-decoration: underline;
+  cursor: pointer;
+  color: #d21633;
+}
+.add-btn {
+  width: 80%; 
+  padding: 10px 0px 10px 0px;
+}
+.add-btn button {
+  padding: 0px 10px 0px 10px;
+  height: 30px;
+  color: white;
+  background-color: #00A751;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.add-btn button:hover {
+  background-color: #00c961;
+}
+.form {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 0px 200px 0px 200px;
+}
+.form-title {
+  width: 100%;
+  text-align: center;
+  font-size: 30px;
+  font-weight: bold;
+  font-family: Arial, Helvetica, sans-serif;
+  padding: 10px 0px 30px 0px;
+}
+.item {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: 10px;
+}
+.form-text {
+  width: 15%;
+}
+.red-star {
+  color: red;
+}
+.form-input {
+  width: 85%;
+}
+.form-input input {
+  width: 100%;
+  height: 30px;
+  border: 1px solid #DCE1E5;
+  border-radius: 3px;
+  padding-left: 10px;
+}
+.form-button {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding-top: 30px;
+}
+.back-btn button {
+  padding: 0px 10px 0px 10px;
+  height: 30px;
+  color: white;
+  background-color: #6B767D;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  margin-right: 5px;
+  cursor: pointer;
+}
+.back-btn button:hover {
+  background-color: #858f96;
+}
+.save-btn button {
+  padding: 0px 10px 0px 10px;
+  height: 30px;
+  color: white;
+  background-color: #00A751;
+  border: none;
+  outline: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.save-btn button:hover {
+  background-color: #00c961;
+}
+.loading {
+  transform: translateX(-50%);
+  margin-left: 50%;
+  margin-top: 50px;
+}
+.delete-form-container {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.delete-form {
+  width: 30%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #515c66;
+  border: 2px double white;
+  padding-top: 10px;
+  border-radius: 3px;
+  padding: 10px;
+}
+.delete-form-text {
+  color: white;
+  font-size: 20px;
+  width: 100%;
+  text-align: center;
+  padding-bottom: 10px;
+}
+.delete-group-btn {
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 5px;
+}
+.delete-group-btn button {
+  width: 100%;
+  height: 30px;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  margin: 5px;
+}
+.resister-form-container {
+  position: fixed;
+  display: flex;
+  top: 0;
+  left: 0;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.register-form {
+  width: 40%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: #515c66;
+  border: 2px double white;
+  padding-top: 10px;
+  border-radius: 3px;
+}
+.resister-form-text {
+  color: white;
+  font-size: 21px;
+  font-weight: bold;
+  width: 100%;
   text-align: center;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.resister-form-input {
+  width: 90%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  padding-bottom: 15px;
+}
+.resister-form-input input {
+  margin: 3px;
+  height: 30px;
+  padding-left: 10px;
+  border-radius: 5px;
+  outline: none;
+  border: none;
+}
+.resister-form-input label {
   color: white;
 }
-
-.App-link {
-  color: #61dafb;
+.confirm-btn {
+  background-color: #0076F7;
+  color: white;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.confirm-btn:hover {
+  background-color: #006ee6;
+}
+.cancel-btn:hover {
+  background-color: #cdcdcd;
+}
+.confirm-delete-btn {
+  background-color: #E95B5B;
+  color: white;
+}
+.confirm-delete-btn:hover {
+  background-color: #eb6a6a;
 }
