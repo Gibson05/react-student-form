@@ -33,13 +33,14 @@ function App() {
 
   function createStudent() {
     let arr = [...students];
-    const obj = new Object();
     setRegID(regID + 1);
-    obj.id = regID;
-    obj.name = regName;
-    obj.email = regEmail;
-    obj.phone = regPhone;
-    obj.birthday = regBirthDate;
+    const obj = {
+      id: regID,
+      name: regName,
+      email: regEmail,
+      phone: regPhone,
+      birthday: regBirthDate
+    };
     arr.unshift(obj);
     setStudents(arr);
     setRegisterForm(false);
