@@ -244,11 +244,11 @@ tr:nth-child(even) {
 .resister-form-input label {
   color: white;
 }
-.confirm-btn {
+.confirm-edit-btn {
   background-color: #0076F7;
   color: white;
 }
-.confirm-btn:hover {
+.confirm-edit-btn:hover {
   background-color: #006ee6;
 }
 .cancel-btn:hover {
@@ -260,4 +260,11 @@ tr:nth-child(even) {
 }
 .confirm-delete-btn:hover {
   background-color: #eb6a6a;
+}
+.confirm-btn {
+  background-color: #00A751;
+  color: white;
+}
+.confirm-btn:hover {
+  background-color: #00c961;
 }

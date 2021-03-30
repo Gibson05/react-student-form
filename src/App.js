@@ -21,6 +21,8 @@ function App() {
 
   const [regPhone, setRegPhone] = useState("");
 
+  const [editForm, setEditForm] = useState(false);
+
   function removeForm(id) {
     setModel(true);
     setDeleteID(id);
@@ -31,6 +33,15 @@ function App() {
     setModel(false);
   }
 
+  function createStudentForm() {
+    setRegisterForm(true)
+    setRegID("")
+    setRegName("")
+    setRegEmail("")
+    setRegPhone("")
+    setRegBirthDate("")
+  }
+  
   function createStudent() {
     let arr = [...students];
     setRegID(regID + 1);
@@ -46,6 +57,35 @@ function App() {
     setRegisterForm(false);
   }
 
+  function editStudentForm(id) {
+    setRegisterForm(true)
+    setEditForm(true)
+    let obj = students.find((ele) => ele.id === id)
+    setRegID(obj.id)
+    setRegName(obj.name)
+    setRegEmail(obj.email)
+    setRegPhone(obj.phone)
+    setRegBirthDate(obj.birthday)
+    console.log(obj);
+  }
+
+  function editStudent() {
+    let arr = [...students]
+    let index = arr.findIndex((ele) => ele.id === regID)
+    arr[index].name = regName
+    arr[index].email = regEmail
+    arr[index].phone = regPhone
+    arr[index].birthday = regBirthDate
+    setStudents(arr)
+    setRegisterForm(false)
+    setEditForm(false)
+  }
+
+  function cancelAllForm() {
+    setEditForm(false)
+    setRegisterForm(false)
+  }
+
   const List = students.map((student) => (
     <tr>
       <td>{student.name}</td>
@@ -53,7 +93,7 @@ function App() {
       <td>{student.email}</td>
       <td>{student.phone}</td>
       <td>
-        <span className="edit-text">
+        <span className="edit-text" onClick={() => editStudentForm(student.id)}>
           <i className="fa fa-edit"></i> Chỉnh Sửa
         </span>
         |
@@ -70,7 +110,7 @@ function App() {
         <div className="table-title">Danh sách học viên</div>
         <div className="add-btn">
           <span>
-            <button onClick={() => setRegisterForm(true)}>
+            <button onClick={createStudentForm}>
               <i className="add-student-btn fa fa-plus-circle"></i> Thêm học
               viên
             </button>
@@ -87,34 +127,43 @@ function App() {
                 <input
                   type="text"
                   id="register-name"
+                  value={regName}
                   onChange={(event) => setRegName(event.target.value)}
                 ></input>
                 <label htmlFor="register-birthday">Date of birth</label>
                 <input
                   type="text"
                   id="register-birthday"
+                  value={regBirthDate}
                   onChange={(event) => setRegBirthDate(event.target.value)}
                 ></input>
                 <label htmlFor="register-email">Email</label>
                 <input
                   type="text"
                   id="register-email"
+                  value={regEmail}
                   onChange={(event) => setRegEmail(event.target.value)}
                 ></input>
                 <label htmlFor="register-phone">Phone Number</label>
                 <input
                   type="text"
                   id="register-phone"
+                  value={regPhone}
                   onChange={(event) => setRegPhone(event.target.value)}
                 ></input>
               </div>
               <div className="delete-group-btn">
-                <button className="confirm-btn" onClick={() => createStudent()}>
+                {editForm 
+                ? <button className="confirm-edit-btn" onClick={() => editStudent()}>
+                  Edit Student
+                </button> 
+                : <button className="confirm-btn" onClick={() => createStudent()}>
                   Create New
-                </button>
+                </button>}
+                
                 <button
                   className="cancel-btn"
-                  onClick={() => setRegisterForm(false)}
+                  onClick={() => cancelAllForm()}
                 >
                   Cancel
                 </button>
