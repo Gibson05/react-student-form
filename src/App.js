@@ -23,6 +23,8 @@ function App() {
 
   const [editForm, setEditForm] = useState(false);
 
+  const [sorting, setSorting] = useState(false);
+
   function removeForm(id) {
     setModel(true);
     setDeleteID(id);
@@ -34,14 +36,14 @@ function App() {
   }
 
   function createStudentForm() {
-    setRegisterForm(true)
-    setRegID("")
-    setRegName("")
-    setRegEmail("")
-    setRegPhone("")
-    setRegBirthDate("")
+    setRegisterForm(true);
+    setRegID("");
+    setRegName("");
+    setRegEmail("");
+    setRegPhone("");
+    setRegBirthDate("");
   }
-  
+
   function createStudent() {
     let arr = [...students];
     setRegID(regID + 1);
@@ -50,7 +52,7 @@ function App() {
       name: regName,
       email: regEmail,
       phone: regPhone,
-      birthday: regBirthDate
+      birthday: regBirthDate,
     };
     arr.unshift(obj);
     setStudents(arr);
@@ -58,32 +60,45 @@ function App() {
   }
 
   function editStudentForm(id) {
-    setRegisterForm(true)
-    setEditForm(true)
-    let obj = students.find((ele) => ele.id === id)
-    setRegID(obj.id)
-    setRegName(obj.name)
-    setRegEmail(obj.email)
-    setRegPhone(obj.phone)
-    setRegBirthDate(obj.birthday)
-    console.log(obj);
+    setRegisterForm(true);
+    setEditForm(true);
+    let obj = students.find((ele) => ele.id === id);
+    setRegID(obj.id);
+    setRegName(obj.name);
+    setRegEmail(obj.email);
+    setRegPhone(obj.phone);
+    setRegBirthDate(obj.birthday);
   }
 
   function editStudent() {
-    let arr = [...students]
-    let index = arr.findIndex((ele) => ele.id === regID)
-    arr[index].name = regName
-    arr[index].email = regEmail
-    arr[index].phone = regPhone
-    arr[index].birthday = regBirthDate
-    setStudents(arr)
-    setRegisterForm(false)
-    setEditForm(false)
+    let arr = [...students];
+    let index = arr.findIndex((ele) => ele.id === regID);
+    arr[index].name = regName;
+    arr[index].email = regEmail;
+    arr[index].phone = regPhone;
+    arr[index].birthday = regBirthDate;
+    setStudents(arr);
+    setRegisterForm(false);
+    setEditForm(false);
   }
 
   function cancelAllForm() {
-    setEditForm(false)
-    setRegisterForm(false)
+    setEditForm(false);
+    setRegisterForm(false);
+  }
+
+  function sortingASC() {
+    let arr = [...students];
+    arr.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
+    setStudents(arr);
+    setSorting(false);
+  }
+
+  function sortingDESC() {
+    let arr = [...students];
+    arr.sort((a, b) => (a.name > b.name ? -1 : b.name > a.name ? 1 : 0));
+    setStudents(arr);
+    setSorting(true);
   }
 
   const List = students.map((student) => (
@@ -120,7 +135,11 @@ function App() {
           <div className="resister-form-container">
             <div className="register-form">
               <div className="resister-form-text">
-                <p>New Student information</p>
+                {editForm ? (
+                  <p>Edit Student information</p>
+                ) : (
+                  <p>New Student information</p>
+                )}
               </div>
               <div className="resister-form-input">
                 <label htmlFor="register-name">Name</label>
@@ -153,18 +172,23 @@ function App() {
                 ></input>
               </div>
               <div className="delete-group-btn">
-                {editForm 
-                ? <button className="confirm-edit-btn" onClick={() => editStudent()}>
-                  Edit Student
-                </button> 
-                : <button className="confirm-btn" onClick={() => createStudent()}>
-                  Create New
-                </button>}
-                
-                <button
-                  className="cancel-btn"
-                  onClick={() => cancelAllForm()}
-                >
+                {editForm ? (
+                  <button
+                    className="confirm-edit-btn"
+                    onClick={() => editStudent()}
+                  >
+                    Edit Student
+                  </button>
+                ) : (
+                  <button
+                    className="confirm-btn"
+                    onClick={() => createStudent()}
+                  >
+                    Create New
+                  </button>
+                )}
+
+                <button className="cancel-btn" onClick={() => cancelAllForm()}>
                   Cancel
                 </button>
               </div>
@@ -198,7 +222,20 @@ function App() {
         <table>
           <thead>
             <tr>
-              <td>Họ tên</td>
+              <td>
+                Họ tên{" "}
+                {sorting ? (
+                  <span
+                    onClick={sortingASC}
+                    className="sorting fa fa-angle-up"
+                  ></span>
+                ) : (
+                  <span
+                    onClick={sortingDESC}
+                    className="sorting fa fa-angle-down"
+                  ></span>
+                )}
+              </td>
               <td>Năm sinh</td>
               <td>Email</td>
               <td>Số Điện Thoại</td>

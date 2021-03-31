@@ -268,3 +268,12 @@ tr:nth-child(even) {
 .confirm-btn:hover {
   background-color: #00c961;
 }
+.sorting {
+  background-color: white;
+  color: black;
+  width: 15px;
+  text-align: center;
+  font-weight: bold;
+  border-radius: 5px;
+  font-size: 15px;
+}
