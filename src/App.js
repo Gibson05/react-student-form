@@ -1,29 +1,36 @@
 import "./App.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { STUDENTS } from "./mock-data";
+import Login from "./components/login.js";
+import Table from "./components/table.js";
+import DeleteModal from "./components/delete-modal.js";
+import Modal from "./components/reg-modal.js";
 
 function App() {
-  const [students, setStudents] = useState(STUDENTS);
-
+  const [students, setStudents] = useState([]);
   const [model, setModel] = useState(false);
-
   const [registerForm, setRegisterForm] = useState(false);
-
   const [deleteID, setDeleteID] = useState(0);
-
   const [regID, setRegID] = useState(STUDENTS.length + 2);
-
   const [regName, setRegName] = useState("");
-
   const [regBirthDate, setRegBirthDate] = useState("");
-
   const [regEmail, setRegEmail] = useState("");
-
   const [regPhone, setRegPhone] = useState("");
-
   const [editForm, setEditForm] = useState(false);
+  const [sorting, setSorting] = useState(true);
+  const [loginPage, setLoginPage] = useState(true);
 
-  const [sorting, setSorting] = useState(false);
+  useEffect(() => {
+    async function getUsers() {
+      const res = await fetch(
+        "https://gibson-test-database.herokuapp.com/users"
+      );
+      const data = await res.json();
+      setStudents(data);
+    }
+    console.log("get data");
+    getUsers();
+  }, []);
 
   function removeForm(id) {
     setModel(true);
@@ -31,6 +38,10 @@ function App() {
   }
 
   function deleteStudent(id) {
+    fetch(`https://gibson-test-database.herokuapp.com/users/${id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+    });
     setStudents(students.filter((ele) => ele.id !== id));
     setModel(false);
   }
@@ -44,19 +55,34 @@ function App() {
     setRegBirthDate("");
   }
 
-  function createStudent() {
+  async function createStudent() {
     let arr = [...students];
     setRegID(regID + 1);
     const obj = {
-      id: regID,
+      // id: regID,
       name: regName,
       email: regEmail,
       phone: regPhone,
       birthday: regBirthDate,
     };
-    arr.unshift(obj);
-    setStudents(arr);
-    setRegisterForm(false);
+
+    fetch("https://gibson-test-database.herokuapp.com/users", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(obj),
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        console.log(data);
+        arr.unshift(data);
+        setStudents(arr);
+        setRegisterForm(false);
+      });
   }
 
   function editStudentForm(id) {
@@ -77,6 +103,16 @@ function App() {
     arr[index].email = regEmail;
     arr[index].phone = regPhone;
     arr[index].birthday = regBirthDate;
+
+    fetch(`https://gibson-test-database.herokuapp.com/users/${regID}`, {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(arr[index]),
+    });
+
     setStudents(arr);
     setRegisterForm(false);
     setEditForm(false);
@@ -101,8 +137,22 @@ function App() {
     setSorting(true);
   }
 
+  function sortingEmailASC() {
+    let arr = [...students];
+    arr.sort((a, b) => (a.email > b.email ? 1 : b.email > a.email ? -1 : 0));
+    setStudents(arr);
+    setSorting(false);
+  }
+
+  function sortingEmailDESC() {
+    let arr = [...students];
+    arr.sort((a, b) => (a.email > b.email ? -1 : b.email > a.email ? 1 : 0));
+    setStudents(arr);
+    setSorting(true);
+  }
+
   const List = students.map((student) => (
-    <tr>
+    <tr key={student.id}>
       <td>{student.name}</td>
       <td>{student.birthday}</td>
       <td>{student.email}</td>
@@ -121,130 +171,44 @@ function App() {
 
   return (
     <div className="container">
-      <div className="list-table">
-        <div className="table-title">Danh sách học viên</div>
-        <div className="add-btn">
-          <span>
-            <button onClick={createStudentForm}>
-              <i className="add-student-btn fa fa-plus-circle"></i> Thêm học
-              viên
-            </button>
-          </span>
-        </div>
-        {registerForm && (
-          <div className="resister-form-container">
-            <div className="register-form">
-              <div className="resister-form-text">
-                {editForm ? (
-                  <p>Edit Student information</p>
-                ) : (
-                  <p>New Student information</p>
-                )}
-              </div>
-              <div className="resister-form-input">
-                <label htmlFor="register-name">Name</label>
-                <input
-                  type="text"
-                  id="register-name"
-                  value={regName}
-                  onChange={(event) => setRegName(event.target.value)}
-                ></input>
-                <label htmlFor="register-birthday">Date of birth</label>
-                <input
-                  type="text"
-                  id="register-birthday"
-                  value={regBirthDate}
-                  onChange={(event) => setRegBirthDate(event.target.value)}
-                ></input>
-                <label htmlFor="register-email">Email</label>
-                <input
-                  type="text"
-                  id="register-email"
-                  value={regEmail}
-                  onChange={(event) => setRegEmail(event.target.value)}
-                ></input>
-                <label htmlFor="register-phone">Phone Number</label>
-                <input
-                  type="text"
-                  id="register-phone"
-                  value={regPhone}
-                  onChange={(event) => setRegPhone(event.target.value)}
-                ></input>
-              </div>
-              <div className="delete-group-btn">
-                {editForm ? (
-                  <button
-                    className="confirm-edit-btn"
-                    onClick={() => editStudent()}
-                  >
-                    Edit Student
-                  </button>
-                ) : (
-                  <button
-                    className="confirm-btn"
-                    onClick={() => createStudent()}
-                  >
-                    Create New
-                  </button>
-                )}
+      {loginPage ? (
+        <Login setLoginPage={setLoginPage} />
+      ) : (
+        <Table
+          setLoginPage={setLoginPage}
+          createStudentForm={createStudentForm}
+          sorting={sorting}
+          sortingASC={sortingASC}
+          sortingDESC={sortingDESC}
+          sortingEmailASC={sortingEmailASC}
+          sortingEmailDESC={sortingEmailDESC}
+          List={List}
+        />
+      )}
 
-                <button className="cancel-btn" onClick={() => cancelAllForm()}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {model && (
-          <div
-            className="delete-form-container"
-            onClick={() => setModel(false)}
-          >
-            <div className="delete-form">
-              <div className="delete-form-text">
-                <p>Are you sure you want to delete?</p>
-              </div>
-              <div className="delete-group-btn">
-                <button
-                  className="confirm-delete-btn"
-                  onClick={() => deleteStudent(deleteID)}
-                >
-                  Yes
-                </button>
-                <button className="cancel-btn" onClick={() => setModel(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
-        <table>
-          <thead>
-            <tr>
-              <td>
-                Họ tên{" "}
-                {sorting ? (
-                  <span
-                    onClick={sortingASC}
-                    className="sorting fa fa-angle-up"
-                  ></span>
-                ) : (
-                  <span
-                    onClick={sortingDESC}
-                    className="sorting fa fa-angle-down"
-                  ></span>
-                )}
-              </td>
-              <td>Năm sinh</td>
-              <td>Email</td>
-              <td>Số Điện Thoại</td>
-              <td></td>
-            </tr>
-          </thead>
-          <tbody>{List}</tbody>
-        </table>
-      </div>
+      {model && (
+        <DeleteModal
+          setModel={setModel}
+          deleteStudent={deleteStudent}
+          deleteID={deleteID}
+        />
+      )}
+      {registerForm && (
+        <Modal
+          editForm={editForm}
+          regName={regName}
+          setRegName={setRegName}
+          regBirthDate={regBirthDate}
+          setRegBirthDate={setRegBirthDate}
+          regEmail={regEmail}
+          setRegEmail={setRegEmail}
+          regPhone={regPhone}
+          setRegPhone={setRegPhone}
+          editStudent={editStudent}
+          createStudent={createStudent}
+          cancelAllForm={cancelAllForm}
+        />
+      )}
     </div>
   );
 }
