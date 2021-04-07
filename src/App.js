@@ -1,8 +1,8 @@
 import "./App.css";
 import { useState, useEffect } from "react";
 import { STUDENTS, URL } from "./mock-data";
-import Login from "./components/Login.js";
-import Table from "./components/Table.js";
+import Login from "./components/login.js";
+import Table from "./components/table.js";
 import DeleteModal from "./components/DeleteModal.js";
 import Modal from "./components/RegModal.js";
 import getUser from "./api.js";
