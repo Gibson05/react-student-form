@@ -1,3 +1,5 @@
+export const URL = "https://gibson-students-api.herokuapp.com/users/"
+
 export const STUDENTS = [
     {
       id: 1,

@@ -299,7 +299,7 @@ tr:nth-child(even) {
   outline: none;
   border-radius: 5px;
   border: none;
-  margin: 15px;
+  margin: 20px;
 }
 .login-btn:hover {
   background-color: #006ee6;
@@ -326,6 +326,23 @@ tr:nth-child(even) {
   border-radius: 3px;
   cursor: pointer;
 }
-.loout-btn {
+.logout-btn {
   background-color: #006ee6;
+}
+.paging {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.paging span {
+  line-height: 30px;
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid gray;
+  margin: 5px;
+  cursor: pointer;
+}
+.paging span:hover {
+  background-color: gray;
 }

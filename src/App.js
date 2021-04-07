@@ -1,10 +1,11 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { STUDENTS } from "./mock-data";
-import Login from "./components/login.js";
-import Table from "./components/table.js";
-import DeleteModal from "./components/delete-modal.js";
-import Modal from "./components/reg-modal.js";
+import { STUDENTS, URL } from "./mock-data";
+import Login from "./components/Login.js";
+import Table from "./components/Table.js";
+import DeleteModal from "./components/DeleteModal.js";
+import Modal from "./components/RegModal.js";
+import getUser from "./api.js";
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -19,17 +20,18 @@ function App() {
   const [editForm, setEditForm] = useState(false);
   const [sorting, setSorting] = useState(true);
   const [loginPage, setLoginPage] = useState(true);
+  const [totalItem, setTotalItem] = useState(0);
+  const [sortProp, setSortProp] = useState("")
+  const [sortDirection, setSortDirection] = useState("")
+  
 
   useEffect(() => {
-    async function getUsers() {
-      const res = await fetch(
-        "https://gibson-test-database.herokuapp.com/users"
-      );
-      const data = await res.json();
-      setStudents(data);
+    async function fetchData() {
+      const { data, totalCount } = await getUser(1);
+      setStudents(data)
+      setTotalItem(totalCount)
     }
-    console.log("get data");
-    getUsers();
+    fetchData()
   }, []);
 
   function removeForm(id) {
@@ -38,7 +40,7 @@ function App() {
   }
 
   function deleteStudent(id) {
-    fetch(`https://gibson-test-database.herokuapp.com/users/${id}`, {
+    fetch(`${URL}${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
     });
@@ -66,7 +68,7 @@ function App() {
       birthday: regBirthDate,
     };
 
-    fetch("https://gibson-test-database.herokuapp.com/users", {
+    fetch(`${URL}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -104,7 +106,7 @@ function App() {
     arr[index].phone = regPhone;
     arr[index].birthday = regBirthDate;
 
-    fetch(`https://gibson-test-database.herokuapp.com/users/${regID}`, {
+    fetch(`${URL}${regID}`, {
       method: "PUT",
       headers: {
         Accept: "application/json",
@@ -123,67 +125,57 @@ function App() {
     setRegisterForm(false);
   }
 
-  function sortingASC() {
-    let arr = [...students];
-    arr.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
-    setStudents(arr);
-    setSorting(false);
+  async function sortASC(prop) {
+    const { data, totalCount } = await getUser(1, prop, "asc")
+    setStudents(data)
+    setSortProp(prop)
+    setSortDirection("asc")
+    setSorting(false)
   }
 
-  function sortingDESC() {
-    let arr = [...students];
-    arr.sort((a, b) => (a.name > b.name ? -1 : b.name > a.name ? 1 : 0));
-    setStudents(arr);
-    setSorting(true);
+  async function sortDESC(prop) {
+    const { data, totalCount } = await getUser(1, prop, "desc")
+    setStudents(data)
+    setSortProp(prop)
+    setSortDirection("desc")
+    setSorting(true)
   }
 
-  function sortingEmailASC() {
-    let arr = [...students];
-    arr.sort((a, b) => (a.email > b.email ? 1 : b.email > a.email ? -1 : 0));
-    setStudents(arr);
-    setSorting(false);
+  async function goToPage(page) {
+    const { data, totalCount } = await getUser(page, sortProp, sortDirection);
+    setStudents(data)
   }
 
-  function sortingEmailDESC() {
-    let arr = [...students];
-    arr.sort((a, b) => (a.email > b.email ? -1 : b.email > a.email ? 1 : 0));
-    setStudents(arr);
-    setSorting(true);
+  let totalPages = Math.round(totalItem / 8)
+  let pagesItem = []
+  for(let i = 1; i <= totalPages; i++) {
+    pagesItem.push(i)
   }
 
-  const List = students.map((student) => (
-    <tr key={student.id}>
-      <td>{student.name}</td>
-      <td>{student.birthday}</td>
-      <td>{student.email}</td>
-      <td>{student.phone}</td>
-      <td>
-        <span className="edit-text" onClick={() => editStudentForm(student.id)}>
-          <i className="fa fa-edit"></i> Chỉnh Sửa
-        </span>
-        |
-        <span className="delete-text" onClick={() => removeForm(student.id)}>
-          <i className="fa fa-trash-o"></i> Xóa
-        </span>
-      </td>
-    </tr>
-  ));
+  const Pages = pagesItem.map(page => (
+    <span onClick={() => goToPage(page)}>{page}</span>
+  ))
 
   return (
     <div className="container">
       {loginPage ? (
         <Login setLoginPage={setLoginPage} />
       ) : (
+        <>
         <Table
           setLoginPage={setLoginPage}
           createStudentForm={createStudentForm}
           sorting={sorting}
-          sortingASC={sortingASC}
-          sortingDESC={sortingDESC}
-          sortingEmailASC={sortingEmailASC}
-          sortingEmailDESC={sortingEmailDESC}
-          List={List}
+          sortASC={sortASC}
+          sortDESC={sortDESC}
+          students={students} 
+          editStudentForm={editStudentForm}
+          removeForm={removeForm}
         />
+        <div className="paging">
+            {Pages}
+        </div>
+        </>
       )}
 
       {model && (
@@ -209,6 +201,7 @@ function App() {
           cancelAllForm={cancelAllForm}
         />
       )}
+    
     </div>
   );
 }
