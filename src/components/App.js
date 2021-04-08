@@ -4,9 +4,8 @@ import { STUDENTS, URL } from "../mock-data";
 import Table from "./table.js";
 import DeleteModal from "./DeleteModal.js";
 import Modal from "./RegModal.js";
-import Pagination from "./Pagination.js"
-import {getUser} from "../api.js";
-
+import Pagination from "./Pagination.js";
+import { getUser } from "../api.js";
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -21,17 +20,20 @@ function App() {
   const [editForm, setEditForm] = useState(false);
   const [sorting, setSorting] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
-  const [sortProp, setSortProp] = useState("")
-  const [sortDirection, setSortDirection] = useState("")
-  
+  const [sortProp, setSortProp] = useState("");
+  const [sortDirection, setSortDirection] = useState("");
+  const [activePage, setActivePage] = useState(1);
+  const [spinner, setSpinner] = useState("false")
 
   useEffect(() => {
+    setSpinner(true)
     async function fetchData() {
       const { data, totalCount } = await getUser(1);
-      setStudents(data)
-      setTotalItem(totalCount)
+      setStudents(data);
+      setTotalItem(totalCount);
+      setSpinner(false);
     }
-    fetchData()
+    fetchData();
   }, []);
 
   function removeForm(id) {
@@ -126,42 +128,51 @@ function App() {
   }
 
   async function sortASC(prop) {
-    const { data } = await getUser(1, prop, "asc")
-    setStudents(data)
-    setSortProp(prop)
-    setSortDirection("asc")
-    setSorting(false)
+    const { data } = await getUser(1, prop, "asc");
+    setStudents(data);
+    setSortProp(prop);
+    setSortDirection("asc");
+    setSorting(false);
+    setActivePage(1)
   }
 
   async function sortDESC(prop) {
-    const { data } = await getUser(1, prop, "desc")
-    setStudents(data)
-    setSortProp(prop)
-    setSortDirection("desc")
-    setSorting(true)
+    const { data } = await getUser(1, prop, "desc");
+    setStudents(data);
+    setSortProp(prop);
+    setSortDirection("desc");
+    setSorting(true);
+    setActivePage(1)
   }
 
   async function goToPage(page) {
+    setStudents([])
+    setSpinner(true)
     const { data } = await getUser(page, sortProp, sortDirection);
-    setStudents(data)
+    setActivePage(page);
+    setSpinner(false);
+    setStudents(data);
   }
-
-  
 
   return (
     <div className="container">
-        <>
+      <>
         <Table
           createStudentForm={createStudentForm}
           sorting={sorting}
           sortASC={sortASC}
           sortDESC={sortDESC}
-          students={students} 
+          students={students}
           editStudentForm={editStudentForm}
           removeForm={removeForm}
+          spinner={spinner}
         />
-        <Pagination totalItem={totalItem} goToPage={goToPage}/>
-        </>
+        <Pagination
+          totalItem={totalItem}
+          goToPage={goToPage}
+          activePage={activePage}
+        />
+      </>
 
       {model && (
         <DeleteModal
@@ -186,7 +197,6 @@ function App() {
           cancelAllForm={cancelAllForm}
         />
       )}
-    
     </div>
   );
 }

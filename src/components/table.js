@@ -3,11 +3,11 @@ export default function Table({
   students,
   editStudentForm,
   removeForm,
-  setLoginPage,
   createStudentForm,
   sorting,
   sortASC,
-  sortDESC
+  sortDESC,
+  spinner
 }) {
   const List = students.map((student) => (
     <tr key={student.id}>
@@ -30,7 +30,7 @@ export default function Table({
   return (
     <div className="list-table">
       <button className="logout-btn">
-      <Link to="/login">Logout</Link>
+      <Link className="text-link" to="/login">Logout</Link>
       </button>
       <div className="table-title">Danh sách học viên</div>
       <div className="add-btn">
@@ -76,8 +76,11 @@ export default function Table({
             <td></td>
           </tr>
         </thead>
-        <tbody>{List}</tbody>
+        <tbody>
+          {List}
+        </tbody>
       </table>
+      {spinner && (<div className="spin"><i class="fa fa-spinner fa-spin"></i></div>)}
     </div>
   );
 }

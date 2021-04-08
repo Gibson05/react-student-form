@@ -24,7 +24,7 @@ export default function Login () {
     return (
     <div className="login-container">
           <div className="login-title">Login</div>
-          {isError && (<div className="login-title">Incorrect Password or Email</div>)}
+          {isError && (<div className="login-title-error">Incorrect Password or Email</div>)}
           <div className="login-input-group">
             <label htmlFor="login-name">Name</label>
             <input onChange={(event) => setLoginEmail(event.target.value)} id="login-name"></input>
