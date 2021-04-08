@@ -1,11 +1,12 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { STUDENTS, URL } from "./mock-data";
-import Login from "./components/login.js";
-import Table from "./components/table.js";
-import DeleteModal from "./components/DeleteModal.js";
-import Modal from "./components/RegModal.js";
-import getUser from "./api.js";
+import { STUDENTS, URL } from "../mock-data";
+import Table from "./table.js";
+import DeleteModal from "./DeleteModal.js";
+import Modal from "./RegModal.js";
+import Pagination from "./Pagination.js"
+import {getUser} from "../api.js";
+
 
 function App() {
   const [students, setStudents] = useState([]);
@@ -19,7 +20,6 @@ function App() {
   const [regPhone, setRegPhone] = useState("");
   const [editForm, setEditForm] = useState(false);
   const [sorting, setSorting] = useState(true);
-  const [loginPage, setLoginPage] = useState(true);
   const [totalItem, setTotalItem] = useState(0);
   const [sortProp, setSortProp] = useState("")
   const [sortDirection, setSortDirection] = useState("")
@@ -126,7 +126,7 @@ function App() {
   }
 
   async function sortASC(prop) {
-    const { data, totalCount } = await getUser(1, prop, "asc")
+    const { data } = await getUser(1, prop, "asc")
     setStudents(data)
     setSortProp(prop)
     setSortDirection("asc")
@@ -134,7 +134,7 @@ function App() {
   }
 
   async function sortDESC(prop) {
-    const { data, totalCount } = await getUser(1, prop, "desc")
+    const { data } = await getUser(1, prop, "desc")
     setStudents(data)
     setSortProp(prop)
     setSortDirection("desc")
@@ -142,28 +142,16 @@ function App() {
   }
 
   async function goToPage(page) {
-    const { data, totalCount } = await getUser(page, sortProp, sortDirection);
+    const { data } = await getUser(page, sortProp, sortDirection);
     setStudents(data)
   }
 
-  let totalPages = Math.round(totalItem / 8)
-  let pagesItem = []
-  for(let i = 1; i <= totalPages; i++) {
-    pagesItem.push(i)
-  }
-
-  const Pages = pagesItem.map(page => (
-    <span onClick={() => goToPage(page)}>{page}</span>
-  ))
+  
 
   return (
     <div className="container">
-      {loginPage ? (
-        <Login setLoginPage={setLoginPage} />
-      ) : (
         <>
         <Table
-          setLoginPage={setLoginPage}
           createStudentForm={createStudentForm}
           sorting={sorting}
           sortASC={sortASC}
@@ -172,11 +160,8 @@ function App() {
           editStudentForm={editStudentForm}
           removeForm={removeForm}
         />
-        <div className="paging">
-            {Pages}
-        </div>
+        <Pagination totalItem={totalItem} goToPage={goToPage}/>
         </>
-      )}
 
       {model && (
         <DeleteModal

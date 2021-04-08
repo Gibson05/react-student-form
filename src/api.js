@@ -1,7 +1,7 @@
 const API = "https://gibson-students-api.herokuapp.com/users/"
 const PAGE_LIMIT = 8
 
-export default async function getUser(page = 1, sort, order) {
+export async function getUser(page = 1, sort, order) {
     let sortProp = sort ? `&_sort=${sort}` : ""
     let sortOrder = order ? `&_order=${order}` : ""
 
@@ -12,3 +12,15 @@ export default async function getUser(page = 1, sort, order) {
     return { data, totalCount }
 }
 
+export async function checkLogin(mail, pass) {
+    return await fetch("https://gibson-students-api.herokuapp.com/login", { 
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            email: mail,
+            password: pass,
+        })
+    })
+}

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom"
 export default function Table({
   students,
   editStudentForm,
@@ -28,8 +29,8 @@ export default function Table({
 
   return (
     <div className="list-table">
-      <button className="logout-btn" onClick={() => setLoginPage(true)}>
-        Log out
+      <button className="logout-btn">
+      <Link to="/login">Logout</Link>
       </button>
       <div className="table-title">Danh sách học viên</div>
       <div className="add-btn">
