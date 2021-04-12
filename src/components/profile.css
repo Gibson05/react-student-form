@@ -1,0 +1,51 @@
+.profile-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+.btn-group {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+.logout-btn {
+    width: 120px;
+    height: 30px;
+    color: white;
+    background-color: #0076F7;
+    border: none;
+    outline: none;
+    border-radius: 3px;
+    padding: 0px 10px 0px 10px;
+    cursor: pointer;
+    margin: 10px 10px 0px 0px;
+  }
+.logout-btn:hover {
+    background-color: #006ee6;
+}
+.avatar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 50%;
+    padding-right: 50px;
+}
+.avatar img {
+    border: 1px solid gray;
+    width: 150px;
+}
+.information {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 20px;
+}
+.information div {
+    width: 100%;
+    margin: 5px;
+}

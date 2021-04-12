@@ -329,8 +329,9 @@ tr:nth-child(even) {
   border-radius: 3px;
   padding: 0px 10px 0px 10px;
   cursor: pointer;
+  margin: 10px 10px 0px 0px;
 }
-.logout-btn {
+.logout-btn:hover {
   background-color: #006ee6;
 }
 .paging {

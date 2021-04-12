@@ -2,8 +2,8 @@ import { useState } from "react"
 import { checkLogin } from "../api"
 import { useHistory } from "react-router-dom"
 // import { useSelector } from 'react-redux'
-import { updateUserName } from '../app/userSlice'
-import { store } from "../app/store"
+// import { updateUserName } from '../app/userSlice'
+// import { store } from "../app/store"
 export default function Login () {
    const history = useHistory()
   //  const userName = useSelector(selectUserName)
@@ -18,7 +18,7 @@ export default function Login () {
         const res = await checkLogin(email, password);
         if (res.status === 200) {
           history.push("/");
-          store.dispatch(updateUserName(email))
+          // store.dispatch(updateUserName(email))
         } else {
           setIsError(true);
         }

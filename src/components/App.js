@@ -7,6 +7,7 @@ import Modal from "./RegModal.js";
 import Pagination from "./Pagination.js";
 import { getUser } from "../api.js";
 
+
 function App() {
   const [students, setStudents] = useState([]);
   const [model, setModel] = useState(false);

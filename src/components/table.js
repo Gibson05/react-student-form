@@ -21,6 +21,10 @@ export default function Table({
     localStorage.setItem("token", "");
   }
 
+  function goToProfile() {
+    history.push("/profile");
+  }
+
   const List = students.map((student) => (
     <tr key={student.id}>
       <td>{student.name}</td>
@@ -41,7 +45,10 @@ export default function Table({
 
   return (
     <div className="list-table">
-      <h2>{userName}</h2>
+      <h2>{userName.name}</h2>
+      <button className="logout-btn" onClick={() => goToProfile()}>
+      Profile
+      </button>
       <button className="logout-btn" onClick={() => goToLogin()}>
       Logout
       </button>

@@ -1,3 +1,5 @@
+import { updateUserName } from "./app/userSlice"
+import { store } from "./app/store"
 const API = "https://gibson-students-api.herokuapp.com/users/"
 const PAGE_LIMIT = 8
 
@@ -32,7 +34,8 @@ export async function checkLogin(mail, pass) {
     const data = await res.json();
     const token = await data.token;
     localStorage.setItem('token', token)
-    console.log(token);
+    await store.dispatch(updateUserName(data))
+    console.log(data);
 
     return res
 }
