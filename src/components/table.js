@@ -1,4 +1,7 @@
-import { Link } from "react-router-dom"
+import { useHistory } from "react-router-dom"
+import { useSelector } from 'react-redux'
+import { selectUserName } from '../app/userSlice'
+
 export default function Table({
   students,
   editStudentForm,
@@ -9,6 +12,15 @@ export default function Table({
   sortDESC,
   spinner
 }) {
+  const history = useHistory()
+  const userName = useSelector(selectUserName)
+  // const dispatch = useDispatch()
+
+  function goToLogin() {
+    history.push("/login");
+    localStorage.setItem("token", "");
+  }
+
   const List = students.map((student) => (
     <tr key={student.id}>
       <td>{student.name}</td>
@@ -29,8 +41,9 @@ export default function Table({
 
   return (
     <div className="list-table">
-      <button className="logout-btn">
-      <Link className="text-link" to="/login">Logout</Link>
+      <h2>{userName}</h2>
+      <button className="logout-btn" onClick={() => goToLogin()}>
+      Logout
       </button>
       <div className="table-title">Danh sách học viên</div>
       <div className="add-btn">

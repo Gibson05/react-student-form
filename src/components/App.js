@@ -1,6 +1,6 @@
 import "./App.css";
 import { useState, useEffect } from "react";
-import { STUDENTS, URL } from "../mock-data";
+import { URL } from "../mock-data";
 import Table from "./table.js";
 import DeleteModal from "./DeleteModal.js";
 import Modal from "./RegModal.js";
@@ -12,7 +12,7 @@ function App() {
   const [model, setModel] = useState(false);
   const [registerForm, setRegisterForm] = useState(false);
   const [deleteID, setDeleteID] = useState(0);
-  const [regID, setRegID] = useState(STUDENTS.length + 2);
+  const [regID, setRegID] = useState(students.length + 2);
   const [regName, setRegName] = useState("");
   const [regBirthDate, setRegBirthDate] = useState("");
   const [regEmail, setRegEmail] = useState("");
@@ -23,10 +23,10 @@ function App() {
   const [sortProp, setSortProp] = useState("");
   const [sortDirection, setSortDirection] = useState("");
   const [activePage, setActivePage] = useState(1);
-  const [spinner, setSpinner] = useState("false")
+  const [spinner, setSpinner] = useState(false);
 
   useEffect(() => {
-    setSpinner(true)
+    setSpinner(true);
     async function fetchData() {
       const { data, totalCount } = await getUser(1);
       setStudents(data);
@@ -44,7 +44,10 @@ function App() {
   function deleteStudent(id) {
     fetch(`${URL}${id}`, {
       method: "DELETE",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': "Bearer " + localStorage.getItem("token"),
+      },
     });
     setStudents(students.filter((ele) => ele.id !== id));
     setModel(false);
@@ -75,6 +78,7 @@ function App() {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
       },
       body: JSON.stringify(obj),
     })
@@ -113,6 +117,7 @@ function App() {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem("token")
       },
       body: JSON.stringify(arr[index]),
     });
@@ -133,7 +138,7 @@ function App() {
     setSortProp(prop);
     setSortDirection("asc");
     setSorting(false);
-    setActivePage(1)
+    setActivePage(1);
   }
 
   async function sortDESC(prop) {
@@ -142,12 +147,12 @@ function App() {
     setSortProp(prop);
     setSortDirection("desc");
     setSorting(true);
-    setActivePage(1)
+    setActivePage(1);
   }
 
   async function goToPage(page) {
-    setStudents([])
-    setSpinner(true)
+    setStudents([]);
+    setSpinner(true);
     const { data } = await getUser(page, sortProp, sortDirection);
     setActivePage(page);
     setSpinner(false);
