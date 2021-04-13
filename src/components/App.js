@@ -6,6 +6,7 @@ import DeleteModal from "./DeleteModal.js";
 import Modal from "./RegModal.js";
 import Pagination from "./Pagination.js";
 import { getUser } from "../api.js";
+import { useHistory } from "react-router-dom"
 
 
 function App() {
@@ -26,6 +27,8 @@ function App() {
   const [activePage, setActivePage] = useState(1);
   const [spinner, setSpinner] = useState(false);
 
+  const history = useHistory()
+
   useEffect(() => {
     setSpinner(true);
     async function fetchData() {
@@ -35,6 +38,10 @@ function App() {
       setSpinner(false);
     }
     fetchData();
+    console.log(localStorage.getItem("token"));
+    if (!localStorage.getItem("token")) {
+      history.push("/login")
+    }
   }, []);
 
   function removeForm(id) {
