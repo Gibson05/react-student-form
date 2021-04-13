@@ -42,7 +42,7 @@ function App() {
     if (!localStorage.getItem("token")) {
       history.push("/login")
     }
-  }, []);
+  }, [history]);
 
   function removeForm(id) {
     setModel(true);
