@@ -12,6 +12,7 @@ export default function Login () {
     const [loginEmail, setLoginEmail] = useState("")
     const [loginPassword, setLoginPassword] = useState("")
     const [isError, setIsError] = useState(false)
+    const [showDemo, setShowDemo] = useState(false)
 
     async function checkLoginDone(email, password) {
       try {
@@ -37,6 +38,7 @@ export default function Login () {
             <input onChange={(event) => setLoginPassword(event.target.value)} id="login-password"></input>
           </div>
           <button className="login-btn" onClick={() => checkLoginDone(loginEmail, loginPassword)}>Login</button>
+          {showDemo ? <div>Email: fhethron0@mlb.com/Password: rmFeXts</div> : <button className="login-btn" onClick={() => setShowDemo(true)}>Show Demo Account</button>}
         </div>
     )
 }
